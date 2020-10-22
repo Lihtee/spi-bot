@@ -1,1 +1,1 @@
-web: cd $HOME/heroku_output && ./spi-bot $PORT
+worker: cd $HOME/heroku_output && ./spi-bot
