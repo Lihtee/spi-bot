@@ -5,6 +5,9 @@ using Telegram.Bot.Args;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace spi_bot
 {
@@ -18,9 +21,10 @@ namespace spi_bot
 
         static void Main(string[] args)
         {
+            if (args.Length == 1) {
+                ClaimSocket(args[0]);
+            }
             botClient = new TelegramBotClient(key);
-            var me = botClient.GetMeAsync().Result;
-            Console.WriteLine($"Spi, {me.Id} {me.FirstName}.");
             botClient.OnMessage += Bot_OnMessage;
             botClient.StartReceiving();
 
@@ -58,6 +62,28 @@ namespace spi_bot
                 );
 
             }
+        }
+
+        static async void ClaimSocket(string portNum) {
+            int port = int.Parse(portNum);
+            IPEndPoint ipPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
+            Socket listenSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            listenSocket.Bind(ipPoint);
+            listenSocket.Listen(10);
+            await Task.Run(() => {
+                var data = new byte[256];
+                while (true) {
+                    Socket handler = listenSocket.Accept();
+                    do 
+                    { 
+                        handler.Receive(data); 
+                    }
+                    while (handler.Available>0);
+                    handler.Send(data);
+                    handler.Shutdown(SocketShutdown.Both);
+                    handler.Close();
+                }
+            });
         }
     }
 }

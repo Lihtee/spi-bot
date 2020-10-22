@@ -1,1 +1,1 @@
-web cd $HOME/heroku_output && ./spi-bot.exe
+web cd $HOME/heroku_output && ./spi-bot.exe $PORT
