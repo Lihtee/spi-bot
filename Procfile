@@ -1,1 +1,1 @@
-worker: cd $HOME/heroku_output && ./spi-bot.exe
+worker: cd $HOME/heroku_output && ./spi-bot
