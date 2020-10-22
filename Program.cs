@@ -24,10 +24,14 @@ namespace spi_bot
             botClient.OnMessage += Bot_OnMessage;
             botClient.StartReceiving();
 
-            Console.WriteLine("Press any key to exit");
-            Console.ReadKey();
-
-            botClient.StopReceiving();
+            Console.WriteLine("Serving the bot");
+            while(true) {
+                try {
+                    Console.ReadKey();
+                } catch (Exception) {
+                    // Nothing.
+                }
+            }
         }
 
         static async void Bot_OnMessage(object sender, MessageEventArgs e) {
